@@ -1,0 +1,25 @@
+{
+  "name": "codigos-typescript",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "ts-jest": "^29.4.6"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicolasagus/codigos-typescript.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/nicolasagus/codigos-typescript/issues"
+  },
+  "homepage": "https://github.com/nicolasagus/codigos-typescript#readme"
+}
