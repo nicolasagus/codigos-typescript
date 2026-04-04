@@ -1,83 +1,51 @@
-import { Calculator } from '../calculadora/calculadora';
-import { Addition, Subtraction, Multiplication, Division, Power } from '../operations';
-describe('Calculator', () => {
-  let calculator: Calculator;
+import { Calculadora } from '../main/Calculadora';
+import { Division } from '../main/division';
+
+describe('Calculadora', () => {
+  let calc: Calculadora;
 
   beforeEach(() => {
-    calculator = new Calculator();
-    calculator.addOperation("Suma", new Addition().execute);
-    calculator.addOperation("Resta", new Subtraction().execute);
-    calculator.addOperation("Multiplicación", new Multiplication().execute);
-    calculator.addOperation("División", new Division().execute);
-    calculator.addOperation("Potencia", new Power().execute);
+    calc = new Calculadora();
   });
 
-  test('should perform addition correctly', () => {
-    const result = calculator.calculate("Suma", 5, 3);
-    expect(result).toBe(8);
+  it('debe lanzar un error cuando se usa una operación no disponible', () => {
+    expect(() => calc.calculate('suma', 5, 3)).toThrow('Operación no disponible: suma');
   });
 
-  test('should perform subtraction correctly', () => {
-    const result = calculator.calculate("Resta", 10, 4);
-    expect(result).toBe(6);
-  });
+  it('debe realizar una operación válida y registrarla en el historial', () => {
+    const division = new Division();
+    calc.addOperation('dividir', division.execute);
 
-  test('should perform multiplication correctly', () => {
-    const result = calculator.calculate("Multiplicación", 7, 8);
-    expect(result).toBe(56);
-  });
-
-  test('should perform division correctly', () => {
-    const result = calculator.calculate("División", 20, 4);
+    const result = calc.calculate('dividir', 10, 2);
     expect(result).toBe(5);
+    expect(calc.getHistory()).toContain('dividir(10, 2) = 5');
+    expect(calc.getLastResult()).toBe(5);
   });
 
-  test('should perform power correctly', () => {
-    const result = calculator.calculate("Potencia", 2, 3);
-    expect(result).toBe(8);
+  it('debe devolver el historial actualizado', () => {
+    const division = new Division();
+    calc.addOperation('dividir', division.execute);
+
+    calc.calculate('dividir', 10, 2);
+    const history = calc.getHistory();
+
+    expect(history).toHaveLength(1);
+    expect(history[0]).toBe('dividir(10, 2) = 5');
   });
 
-  test('should handle division by zero', () => {
-    expect(() => {
-      calculator.calculate("División", 10, 0);
-    }).toThrow('División por cero');
+  it('debe permitir obtener las operaciones disponibles', () => {
+    const division = new Division();
+    calc.addOperation('dividir', division.execute);
+
+    const operations = calc.getAvailableOperations();
+    expect(operations).toContain('dividir');
+    expect(operations).toHaveLength(1);
   });
 
-  test('should maintain history', () => {
-    calculator.calculate("Suma", 5, 3);
-    const history = calculator.getHistory();
-    expect(history.length).toBe(1);
-    expect(history[0]).toContain('Suma');
-  });
-
-  test('should throw error for non-existent operation', () => {
-    expect(() => {
-      calculator.calculate("Operación no existente", 5, 3);
-    }).toThrow('Operación no existente no está registrada');
-  });
-
-  test('should return correct history after multiple operations', () => {
-    calculator.calculate("Suma", 5, 3);
-    calculator.calculate("Resta", 10, 4);
-    calculator.calculate("Multiplicación", 7, 8);
-    
-    const history = calculator.getHistory();
-    expect(history.length).toBe(3);
-    expect(history[0]).toContain('Suma');
-    expect(history[1]).toContain('Resta');
-    expect(history[2]).toContain('Multiplicación');
-  });
-
-  test('should clear history correctly', () => {
-    calculator.calculate("Suma", 5, 3);
-    const initialHistory = calculator.getHistory();
-    expect(initialHistory.length).toBe(1);
-    
-    calculator.clearHistory();
-    const clearedHistory = calculator.getHistory();
-    expect(clearedHistory.length).toBe(0);
+  it('debe permitir establecer un nuevo resultado final', () => {
+    calc.setLastResult(42);
+    expect(calc.getLastResult()).toBe(42);
   });
 });
 
-Copy
-typescript
+

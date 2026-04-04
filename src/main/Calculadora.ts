@@ -1,7 +1,8 @@
-// src/calculator/Calculator.ts
 
 
-export class Calculadora implements Calculadora {
+import { ICalculator } from './Icalculadora';
+
+export class Calculadora implements ICalculator {
   private operations: Map<string, (a: number, b: number) => number>;
   private history: string[];
   private lastResult: number | undefined;
